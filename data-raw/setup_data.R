@@ -43,7 +43,6 @@ readr::write_csv(world_cities_edited, "data-raw/worldcities_collapsed.csv")
 
 library(dplyr)
 countries_data <- readr::read_csv("data-raw/diverstidy - countries.csv")
-# readr::write_rds(countries_data, "R/countries_data.rds")
 usethis::use_data(countries_data, overwrite = TRUE)
 usethis::use_data(countries_data, internal = TRUE, overwrite = TRUE)
 

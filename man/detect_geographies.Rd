@@ -2,7 +2,7 @@
 % Please edit documentation in R/detect_geographies.R
 \name{detect_geographies}
 \alias{detect_geographies}
-\title{Convert messy text and email data into standardized geographies such as countries, country codes, and continents.}
+\title{Detect geographies from messy text data or email addresses}
 \usage{
 detect_geographies(
   data,
@@ -11,7 +11,7 @@ detect_geographies(
   output = c("country", "iso_2", "iso_3", "flag", "continent", "region", "sub_region",
     "int_region", "country_chinese", "country_russian", "country_french",
     "country_spanish", "country_arabic"),
-  email = FALSE,
+  email = NULL,
   cities = TRUE,
   denonyms = TRUE
 )
@@ -21,31 +21,58 @@ detect_geographies(
 
 \item{id}{A numeric or character vector unique to each entry.}
 
-\item{input}{Character vector of text data that includes the name of cities, states, 
-and/or countries that will be standardized into country names or country codes. If multiple countries are detected, they will be separated by the "|" symbol.}
+\item{input}{Character string giving the name of a column
+in \code{data} that will be checked for geographic information.
+This column can include the name of cities, states, 
+and/or countries that will be standardized into country names or country codes.}
 
 \item{output}{Output column. Options include 'country', 'iso2', 'iso3', 'flag', 'continent', 'region', 'sub_region', 'int_region', 'country_arabic', 'country_chinese', 'country_french', 'country_russian', and 'country_spanish'.}
 
-\item{email}{Character vector of email or email domain information. Defaults to FALSE}
+\item{email}{Optional character string giving the name of a column in \code{data}
+containing email or email domain information.}
 
 \item{cities}{Optional argument to detect major cities in each country. Defaults to TRUE.}
 
 \item{denonyms}{Optional argument to detect denonyms of inhabitants of each country. Defaults to TRUE.}
 }
+\value{
+An updated version of the input dataset (\code{data}),
+with new columns added. A new column will be created with the naming structure
+\code{"{output}_{input}"}. For example, if the user specified \code{input = "home"}
+and \code{output = "country"}, then a new column named \code{"country_home"} will be created.
+If the \code{email} parameter is used, then a new column will be created with the naming structure
+\code{"{output}_email"}.
+
+If an individual identified by \code{id} has
+multiple countries detected based on the \code{input} variable,
+then the output data will contain multiple rows for that value of \code{id}.
+}
 \description{
+Convert messy text data into standardized geographic identifiers such as countries, country codes, and continents.
+}
+\details{
 This function standardizes messy text data that contains city, region, and/or country names 
 as well as email domains into standardized geographic entities. The detect_geographies() function 
 relies on a "funnel matching" method that unnests text and then reiterates over n-grams, matching 
 all words sequences from n to n = 1 without much use of regular expressions or text cleaning. 
-Currently, the function offers 14 output types including countries, continents, flag emojis, and seven languages.
+Currently, the function offers 14 output types, including countries, continents, flag emojis, and seven languages.
 }
 \examples{
 
 library(tidyverse)
-library(diverstidy)
-data(github_users)
 
-classified_by_text <- github_users \%>\%
-  detect_geographies(login, location, "country", email)
+example_data <- data.frame(
+  login      = c("colin_robinson", "jackie_daytona", "nadja"),
+  email_addr = c("travelbug54@aol.com", "laszlo@cravensworth.uk", "nadja@gmail.com"),
+  bio        = c("new york", "new york by way of england", "small greek island")
+)
+
+example_data \%>\%
+  detect_geographies(
+    id     = login, 
+    input  = "bio", 
+    output = "country",
+    email  = "email_addr"
+  )
 
 }
