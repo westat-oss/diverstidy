@@ -13,7 +13,8 @@
 #' in \code{data} that will be checked for geographic information.
 #' This column can include the name of cities, states, 
 #' and/or countries that will be standardized into country names or country codes.
-#' @param output Output column. Options include 'country', 'iso2', 'iso3', 'flag', 'continent', 'region', 'sub_region', 'int_region', 'country_arabic', 'country_chinese', 'country_french', 'country_russian', and 'country_spanish'.
+#' @param output A character string specifying what kind of geographic output to extract.
+#' Options include 'country', 'iso2', 'iso3', 'flag', 'continent', 'region', 'sub_region', 'int_region', 'country_arabic', 'country_chinese', 'country_french', 'country_russian', and 'country_spanish'.
 #' @param email Optional character string giving the name of a column in \code{data}
 #' containing email or email domain information.
 #' @param cities Optional argument to detect major cities in each country. Defaults to TRUE.
