@@ -17,7 +17,7 @@
 #' @param email Optional character string giving the name of a column in \code{data}
 #' containing email or email domain information.
 #' @param cities Optional argument to detect major cities in each country. Defaults to TRUE.
-#' @param denonyms Optional argument to detect denonyms of inhabitants of each country. Defaults to TRUE.
+#' @param demonyms Optional argument to detect demonyms of inhabitants of each country. Defaults to TRUE.
 #'
 #' @return An updated version of the input dataset (\code{data}),
 #' with new columns added. A new column will be created with the naming structure
@@ -55,7 +55,7 @@ detect_geographies <- function(data, id, input,
                                           "continent", "region", "sub_region", 
                                           "int_region", "country_chinese", "country_russian", 
                                           "country_french", "country_spanish", "country_arabic"), 
-                              email = NULL, cities = TRUE, denonyms = TRUE) {
+                              email = NULL, cities = TRUE, demonyms = TRUE) {
   pb <- progress::progress_bar$new(total = 100)
   pb$tick(0)
   # 2. convert all vars with enquos
@@ -87,10 +87,10 @@ detect_geographies <- function(data, id, input,
       tidyr::unite(recode_column, c("recode_column", "recode_cities"), sep="|") %>% 
       dplyr::mutate(catch_terms = stringr::str_replace_all(catch_terms, "\\|NULL", "")) %>% 
       dplyr::mutate(recode_column = stringr::str_replace_all(recode_column, "\\|NULL", ""))
-  } else if (denonyms) {
+  } else if (demonyms) {
     dictionary <- dictionary %>% 
-      tidyr::unite(catch_terms, c("catch_terms", "denonyms"), sep="|") %>% 
-      tidyr::unite(recode_column, c("recode_column", "recode_denonyms"), sep="|") %>% 
+      tidyr::unite(catch_terms, c("catch_terms", "demonyms"), sep="|") %>% 
+      tidyr::unite(recode_column, c("recode_column", "recode_demonyms"), sep="|") %>% 
       dplyr::mutate(catch_terms = stringr::str_replace_all(catch_terms, "\\|NULL", "")) %>% 
       dplyr::mutate(recode_column = stringr::str_replace_all(recode_column, "\\|NULL", ""))
   }

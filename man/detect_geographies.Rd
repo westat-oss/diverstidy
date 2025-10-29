@@ -13,7 +13,7 @@ detect_geographies(
     "country_spanish", "country_arabic"),
   email = NULL,
   cities = TRUE,
-  denonyms = TRUE
+  demonyms = TRUE
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ containing email or email domain information.}
 
 \item{cities}{Optional argument to detect major cities in each country. Defaults to TRUE.}
 
-\item{denonyms}{Optional argument to detect denonyms of inhabitants of each country. Defaults to TRUE.}
+\item{demonyms}{Optional argument to detect demonyms of inhabitants of each country. Defaults to TRUE.}
 }
 \value{
 An updated version of the input dataset (\code{data}),
