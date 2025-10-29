@@ -29,3 +29,51 @@ test_that("Small example works correctly", {
   ))
   
 })
+
+test_that("Expected results from small sample of GitHub data", {
+
+  expected_outputs <- dplyr::tribble(
+    ~login,          ~location,                                           ~country_location,        
+    "1",             "Liechtenstein, Switzerland",                        "Liechtenstein",         
+    "1",             "Liechtenstein, Switzerland",                        "Switzerland",           
+    "2",             "UAE, Qatar, Oman, Saudi, Kuwait, Bahrain",          "Bahrain",               
+    "2",             "UAE, Qatar, Oman, Saudi, Kuwait, Bahrain",          "Kuwait",                
+    "2",             "UAE, Qatar, Oman, Saudi, Kuwait, Bahrain",          "Oman",                  
+    "2",             "UAE, Qatar, Oman, Saudi, Kuwait, Bahrain",          "Qatar",                 
+    "2",             "UAE, Qatar, Oman, Saudi, Kuwait, Bahrain",          "United Arab Emirates",  
+    "3",             "Tahiti, French Polynesia, Polynésie française",     "French Polynesia",      
+    "4",             "Lima, Perú",                                        "Peru",                  
+    "5",             "Banja Luka, Serb Republic, Bosnia and Herzegovina", "Bosnia and Herzegovina",
+    "6",             "Munich",                                            "Germany",
+    "7",             "Berlin",                                            "Germany"
+  )
+
+  inputs <- expected_outputs |> distinct(login, location, .keep_all = FALSE)
+
+  result <- inputs %>%
+    detect_geographies(
+      id     = login, 
+      input  = c("location"), 
+      output = "country",
+      demonyms = FALSE
+    )
+  
+  expect_equal(
+    object = anti_join(
+      x = expected_outputs,
+      y = result,
+      by = c("login", "location", "country_location")
+    ) |> nrow(),
+    expected = 0
+  )
+  
+  expect_equal(
+    object = anti_join(
+      x = result,
+      y = expected_outputs,
+      by = c("login", "location", "country_location")
+    ) |> nrow(),
+    expected = 0
+  )
+
+})
