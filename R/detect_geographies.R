@@ -9,9 +9,9 @@
 #'
 #' @param data A data frame or data frame extension (e.g. a tibble).
 #' @param id A numeric or character vector unique to each entry.
-#' @param input Character string giving the name of a column
+#' @param input Character vector giving the name of one or more columns
 #' in \code{data} that will be checked for geographic information.
-#' This column can include the name of cities, states, 
+#' The column's text will be scanned for the names of cities, states, 
 #' and/or countries that will be standardized into country names or country codes.
 #' @param output A character string specifying what kind of geographic output to extract.
 #' Options include 'country', 'iso2', 'iso3', 'flag', 'continent', 'region', 'sub_region', 'int_region', 'country_arabic', 'country_chinese', 'country_french', 'country_russian', and 'country_spanish'.
@@ -22,13 +22,15 @@
 #'
 #' @return An updated version of the input dataset (\code{data}),
 #' with new columns added. A new column will be created with the naming structure
-#' \code{"{output}_{input}"}. For example, if the user specified \code{input = "home"}
-#' and \code{output = "country"}, then a new column named \code{"country_home"} will be created.
+#' \code{"{output}_{input}"}, for each value of input. 
+#' For example, if the user specified \code{input = c("home", "bio")}
+#' and \code{output = "country"}, then new columns named \code{"country_home"} 
+#' and \code{"country_bio"} will be created.
 #' If the \code{email} parameter is used, then a new column will be created with the naming structure
 #' \code{"{output}_email"}.
 #' 
 #' If an individual identified by \code{id} has
-#' multiple countries detected based on the \code{input} variable,
+#' multiple countries detected based on the \code{input} variables,
 #' then the output data will contain multiple rows for that value of \code{id}.
 #' 
 #' 
